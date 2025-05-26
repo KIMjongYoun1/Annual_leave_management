@@ -1,4 +1,4 @@
-# 💼 Leave Management System (LMS)
+# 💼 Leave Management System (LMS) 
 
 > **직원 연차 및 휴가 관리를 위한 웹 기반 솔루션**
 
