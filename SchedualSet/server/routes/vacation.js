@@ -68,7 +68,7 @@ router.delete('/:id', async(req,res)=>{
         if(result.affectedRows === 0){
             return res.status(404).json({message: '해당휴가가 존재하지 않습니다.'});
         }
-        const usedDays = calculateUsedDays(vacation.tart_date, vacation.end_date);
+        const usedDays = calculateUsedDays(vacation.start_date, vacation.end_date);
         await restoreLeave(pool, vacation.user_id, usedDays);
         
         return res.status(200).json({message: '삭제성공'});

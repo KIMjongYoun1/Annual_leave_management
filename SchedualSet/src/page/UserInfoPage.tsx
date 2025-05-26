@@ -52,7 +52,7 @@ export default function UserInfoPage() {
             setReason('');
             setStartDate('');
             setEndDate('');
-
+            
             const res = await axios.get(`http://localhost:3001/api/vacations/user/${user.user_id}`);
             setVacations(res.data);
 
