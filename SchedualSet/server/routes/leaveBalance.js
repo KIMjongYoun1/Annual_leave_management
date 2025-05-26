@@ -13,11 +13,15 @@ router.get('/:userId', async (req,res) => {
         }
 
         const [vacations] = await pool.execute('SELECT * FROM vacations WHERE user_id = ?', [userId]);
+        
         const used = vacations.reduce((acc, v) => {
+            if (v.leave_type === 'Half') return acc + 0.5;
+
             const start = new Date(v.start_date);
             const end = new Date(v.end_date);
-            const diff = Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1
-            return acc + diff;
+            const diff = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
+            const total = Math.floor(diff) + 1;
+            return acc + total;;
         }, 0);
         const leaveInfo = calculateLeave(user.join_date, used);
 

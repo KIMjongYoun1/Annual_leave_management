@@ -12,6 +12,7 @@ export default function VacationFrom(){
     const [reason, setReason] = useState('');
     const raw = localStorage.getItem('user');
     const user = raw ? JSON.parse(raw) : null;
+    const [leaveType, setLeaveType] = useState('Annual');
 
     if (!user) {
         alert('로그인이 필요합니다');
@@ -25,7 +26,7 @@ export default function VacationFrom(){
         const payload = {
             user_id : user.user_id, // 로그인구현전까지
                 name: user.user_name,
-                title: reason || '연차',
+                title: reason || leaveType,
                 start_date: formatDate(startDate),
                 end_date: formatDate(endDate),
                 
@@ -48,6 +49,13 @@ export default function VacationFrom(){
         <form onSubmit={handleSubmit}>
             <div>
             <h3>{user.user_name} 님의 휴가 등록</h3>
+            </div>
+            <div>
+                <select value={leaveType} onChange={(e) => setLeaveType(e.target.value)}>
+                    <option value = "Annual">연차</option>
+                    <option value = "Half">반차</option>
+                    <option value = "Sick">병가</option>
+                </select>
             </div>
             <div>
                 <label>시작일 : </label>

@@ -18,12 +18,16 @@ function calculateLeave(joinData, usedDays = 0) {
 }
 
 // 사용일 계산함수
-function calculateUsedDays(start, end){
+function calculateUsedDays(start, end, leave_type = 'Annual'){
+    if (leave_type === 'Half') return 0.5;
+    
     const startDate = new Date(start);
     const endDate = new Date(end);
     const diffTime = endDate.getTime() - startDate.getTime();
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    const diffDays = diffTime / (1000 * 60 * 60 * 24) + 1;
+    const totalDays = Math.floor(diffDays) + 1;
     return diffDays > 0 ? diffDays : 0;
+    
 }
 
 async function deductLeave(pool, userId, usedDays) {

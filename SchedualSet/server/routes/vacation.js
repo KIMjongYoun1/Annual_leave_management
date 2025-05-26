@@ -4,14 +4,14 @@ const router = express.Router();
 const { deductLeave, restoreLeave, calculateUsedDays } = require('../service/leaveService');
 
 router.post('/', async(req, res)=>{
-    const { user_id,name, title, start_date, end_date} = req.body;
+    const { user_id,name, title, start_date, end_date, leave_type} = req.body;
    try{
     
 
     if(!start_date || !end_date) {
         return res.status(404).json({message: "날짜가 올바르지 않습니다"});
     }
-    const usedDays = calculateUsedDays(start_date,end_date);
+    const usedDays = leave_type === '반차' ? 0.5 : calculateUsedDays(start_date,end_date, leave_type);
     const [[balance]] = await pool.execute(
         'SELECT remaining_days FROM leave_balances WHERE user_id = ?', [user_id]
     );
@@ -22,14 +22,16 @@ router.post('/', async(req, res)=>{
     }
 
     const [result] = await pool.execute(
-    'INSERT INTO vacations (user_id,title,start_date, end_date, name) VALUES (?,?,?,?,?)',
-    [user_id, title, start_date, end_date, name]);
+    'INSERT INTO vacations (user_id,title,start_date, end_date, name, leave_type) VALUES (?,?,?,?,?,?)',
+    [user_id, title, start_date, end_date, name, leave_type]);
     console.log(usedDays);
+    console.log(req.body);
 
     await deductLeave(pool, user_id, usedDays);
 
     res.status(201).json({message : '휴가 등록 성공', id: result.insertId});
-    console.log('📥 저장될 값:', { user_id, name, title, start_date, end_date });
+    console.log('📥 저장될 값:', { user_id, name, title, start_date, end_date, leave_type,usedDays });
+    console.log('차감될 일수:', usedDays);
 
 } catch (err){
     
@@ -72,6 +74,7 @@ router.delete('/:id', async(req,res)=>{
         await restoreLeave(pool, vacation.user_id, usedDays);
         
         return res.status(200).json({message: '삭제성공'});
+        
     } catch (err) {
         console.error('삭제실페',err);
         res.status(500).json({message: '서버오류'});
