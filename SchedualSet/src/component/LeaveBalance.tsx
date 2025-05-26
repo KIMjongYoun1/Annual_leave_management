@@ -7,7 +7,7 @@ export default function LeaveBalance() {
 
     useEffect(() => {
         axios.get(`http://localhost:3001/api/leave/${user.user_id}`)
-            .then(res => setLeave(res.data)),
+            .then(res => setLeave(res.data))
             .catch(err => console.error('휴가정보 불러오기 실패', err));
            
     }, []);

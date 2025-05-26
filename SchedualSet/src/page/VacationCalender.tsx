@@ -32,20 +32,39 @@ export default function VacationClendar() {
     const fetchEvents = async () =>{
         try {
             const res = await axios.get('http://localhost:3001/api/vacations');
-            const formatted = res.data.map((item:any) =>({
-                title: `${item.name} - ${item.title}`,
+            const formatted = res.data.map((item: any) => {
+              // 💡 title(휴가 유형) 값을 한글로 변환
+              let vacationType = '';
+              switch (item.title) {
+                case 'Annual':
+                  vacationType = '연차';
+                  break;
+                case 'Half':
+                  vacationType = '반차';
+                  break;
+                case 'Sick':
+                  vacationType = '병가';
+                  break;
+                default:
+                  vacationType = item.title; // fallback
+              }
+            
+              return {
+                title: `${item.name} - ${vacationType}`, // ✅ 한글로 바인딩된 값 사용
                 start: formatDateFromDB(item.start_date),
                 end: plusOneDay(item.end_date),
-                allDay:true,
-                extendedProps:{
-                vacation_id: item.vacation_id,
-                user_id: item.user_id,
-                name: item.name,
-                title: item.title
+                allDay: true,
+                extendedProps: {
+                  vacation_id: item.vacation_id,
+                  user_id: item.user_id,
+                  name: item.name,
+                  title: item.title // 원래 영문 타입 값은 그대로 유지 가능
                 }
-                
-            }));
+              };
+            });
+            
             setEvents(formatted);
+            
         } catch (err) {
             console.error('휴가불러오기 실패', err);
         }

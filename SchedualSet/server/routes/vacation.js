@@ -81,4 +81,15 @@ router.delete('/:id', async(req,res)=>{
     }
 });
 
+// ✅ 전체 휴가 목록 조회
+router.get('/', async (req, res) => {
+    try {
+      const [rows] = await pool.execute('SELECT * FROM vacations');
+      res.json(rows);
+    } catch (err) {
+      console.error('전체 휴가 조회 실패', err);
+      res.status(500).json({ error: '전체 휴가 조회 실패' });
+    }
+  });
+
 module.exports = router;
