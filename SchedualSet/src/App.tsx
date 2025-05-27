@@ -10,14 +10,18 @@ import UserInfoPage from './page/UserInfoPage';
 import ProtectedRoute from './routes/ProtectedRoute';
 import LogoutPage from './page/LogoutPage';
 import AppHeader from './component/AppHeader';
-
+import AdminPage from './page/AdminPage';
 function App() {
   // const [events, setEvents] = useState([]);
   //  prop 확장 대비용 path="/claendar" element={-----} evets={evets}
   // 현재는 캘린더 한곳에서만 사용하기에 내부처리 되어있음
 
   return (
+    
     <Router>
+      <nav>
+      
+      </nav>
       <AppHeader />
     <Routes>
         <Route path="/user/info" element={<ProtectedRoute><UserInfoPage /></ProtectedRoute>} />
@@ -27,6 +31,7 @@ function App() {
         <Route path="/" element={<Navigate to="/calendar" />} />
         <Route path="/calendar" element={<VacationCalendar />} />
         <Route path="/vacations" element={<VacationForm />} />
+        <Route path="/admin" element={<AdminPage />} /> 
       </Routes>
     </Router>
   );

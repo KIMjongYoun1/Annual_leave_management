@@ -14,6 +14,7 @@ export default function LoginPage() {
     if (user) {
       alert('이미 로그인되어 있습니다.');
       navigate('/calendar'); 
+      console.log(localStorage);
     }
   }, []);
 
