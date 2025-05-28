@@ -3,9 +3,9 @@ import { useState } from 'react'; //중복선언
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
-export default function VacationFrom(){
+export default function VacationForm(){
     const navigate = useNavigate();
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
@@ -15,32 +15,42 @@ export default function VacationFrom(){
     const [leaveType, setLeaveType] = useState('Annual');
 
     if (!user) {
-        alert('로그인이 필요합니다');
         return <Navigate to ="/users/login" />
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+        if (startDate && endDate && endDate < startDate) {
+            alert("종료일은 시작일보다 빠를 수 없습니다.");
+            return;
+        }
+
         //여기서 Axios 등으로 API호출
         const payload = {
             user_id : user.user_id, // 로그인구현전까지
                 name: user.user_name,
-                title: reason || leaveType,
+                leave_type: reason || leaveType,
                 start_date: formatDate(startDate),
                 end_date: formatDate(endDate),
+                title: reason?.trim() || leaveType 
                 
         };
         
         try {
+            
            await axios.post('http://localhost:3001/api/vacations', payload); 
             console.log('📦 전달된 값:', payload);
             alert('휴가 등록 완료!');
             navigate('/user/info');
 
-        } catch (err) {
-            console.error('📦 전달된 값:', payload);
-            alert('등록 실패');
+        } catch (err: any) {
+            console.log("🧨 오류 응답:", err.response);
+        
+            if (err.response?.status === 400) {
+                alert(err.response.data.message); // "잔여 연차 부족"
+            } else {
+                alert('등록 실패');
+            }
         }
         console.log({startDate, endDate, reason});
     };
@@ -48,7 +58,7 @@ export default function VacationFrom(){
     return (
         <form onSubmit={handleSubmit}>
             <div>
-            <h3>{user.user_name} 님의 휴가 등록</h3>
+            <h3>{user!.user_name} 님의 휴가 등록</h3>
             </div>
             <div>
                 <select value={leaveType} onChange={(e) => setLeaveType(e.target.value)}>

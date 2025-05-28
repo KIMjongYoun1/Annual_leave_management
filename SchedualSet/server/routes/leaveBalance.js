@@ -3,16 +3,16 @@ const router = express.Router();
 const pool = require('../db');
 const { calculateLeave } = require('../service/leaveService');
 
-router.get('/:userId', async (req,res) => {
-    const { userId } = req.params;
+router.get('/:userid', async (req,res) => {
+    const { userid } = req.params;
     const currentYear = new Date().getFullYear();
     try {
-        const [[user]] = await pool.execute('SELECT join_date FROM users WHERE user_id = ?', [userId]);
+        const [[user]] = await pool.execute('SELECT join_date FROM users WHERE user_id = ?', [userid]);
         if (!user || !user.join_date){
             return res.status(404).json({message: '유저정보가 없습니다'});
         }
 
-        const [vacations] = await pool.execute('SELECT * FROM vacations WHERE user_id = ?', [userId]);
+        const [vacations] = await pool.execute('SELECT * FROM vacations WHERE user_id = ?', [userid]);
         
         const used = vacations.reduce((acc, v) => {
             if (v.leave_type === 'Half') return acc + 0.5;
@@ -26,21 +26,21 @@ router.get('/:userId', async (req,res) => {
         const leaveInfo = calculateLeave(user.join_date, used);
 
         const [exists] = await pool.execute(
-            'SELECT * FROM leave_balances WHERE user_id = ? AND year = ?',[userId, currentYear]
+            'SELECT * FROM leave_balances WHERE user_id = ? AND year = ?',[userid, currentYear]
         );
 
         if (exists.length === 0){
             await pool.execute(
                 `INSERT INTO leave_balances
                 (user_id, earned_days, used_days, remaining_days, last_updated, year)
-                VALUES (?, ?, ?, ?, NOW(), ?)`,[userId, leaveInfo.earned, leaveInfo.used, leaveInfo.remaining, currentYear]
+                VALUES (?, ?, ?, ?, NOW(), ?)`,[userid, leaveInfo.earned, leaveInfo.used, leaveInfo.remaining, currentYear]
             );
          } else {
                 await pool.execute(
                     `UPDATE leave_balances SET
                     earned_days = ?, used_days = ?, remaining_days = ?, last_updated = NOW()
                     WHERE user_id = ? AND year = ?`,
-                    [leaveInfo.earned, leaveInfo.used, leaveInfo.remaining, userId, currentYear]
+                    [leaveInfo.earned, leaveInfo.used, leaveInfo.remaining, userid, currentYear]
                 );
             }
         

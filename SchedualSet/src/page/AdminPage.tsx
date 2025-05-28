@@ -1,78 +1,20 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-
-interface User {
-    user_id: string;
-    user_name: string;
-    department: string;
-    position: string;
-    role: string;
-}
+import { useState } from 'react';
+import AdmUserManagement from '../component/AdmUserManagement'; // 파일명과 일치시켜야 함
+import AdmVacationManagement from '../component/AdmVacationManagement'; // 휴가 관리 탭은 이후 구현
 
 export default function AdminPage() {
+    const [tab, setTab] = useState<'user' | 'vacation'>('user');
 
-    const [users, setUsers] = useState<User[]>([]);
-    const navigate = useNavigate();
-    const user = JSON.parse(localStorage.getItem('user') || 'null');
-
-    useEffect(() => {
-        if (!user || user.role !== 'Admin') {
-            alert('접근권한이 없습니다');
-            navigate('/');
-        }
-    })
-
-    useEffect(() => {
-        axios.get('http://localhost:3001/api/admin/users')
-            .then(res => setUsers(res.data))
-            .catch(err => console.error('관리자 유저 조회 실패'), err);
-    }, []);
-
-    const handleRoleChange = async (user_id: string, newRole: string) => {
-        try {
-            await axios.put(`http://localhost:3001/api/admin/users/${user_id}/role`, { role: newRole });
-            alert('권한변경 성공');
-            const res = await axios.get(`http://localhost:3001/api/admin/users`);
-            setUsers(res.data);
-            console.log('값', res.data);
-        } catch (err) {
-            alert('변경실패');
-            console.error(err);
-        }
-    }
     return (
         <div style={{ padding: '20px' }}>
-            <h2>관리자 전용 - 유저목록</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>아이디</th>
-                        <th>이름</th>
-                        <th>부서</th>
-                        <th>직급</th>
-                        <th>권한</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.map(u => (
-                        <tr key={u.user_id}>
-                            <td>{u.user_id}</td>
-                            <td>{u.user_name}</td>
-                            <td>{u.department}</td>
-                            <td>{u.position}</td>
-                            <td>{u.role}</td>
-                            <td>
-                                <select value={u.role} onChange={(e) => handleRoleChange(u.user_id, e.target.value)}>
-                                    <option value="User">User</option>
-                                    <option value="Admin">Admin</option>
-                                </select>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <h2>관리자 페이지</h2>
+            <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
+                <button onClick={() => setTab('user')}>유저 관리</button>
+                <button onClick={() => setTab('vacation')}>휴가 관리</button>
+            </div>
+
+            {tab === 'user' && <AdmUserManagement />}
+            {tab === 'vacation' && <AdmVacationManagement />}
         </div>
     );
-
 }

@@ -25,7 +25,7 @@ export default function AppHeader() {
     <Link to="/calendar" style={{ marginRight: '15px', color: 'white', textDecoration: 'none' }}>📅 Home</Link>
     <Link to="/user/info" style={{ color: 'white', textDecoration: 'none' }}>👤 My Page</Link>
     {user?.role === 'Admin' && (
-      <Link to ="/admin" style={{marginLeft: '15px', color: 'black'}}>관리자</Link>
+      <Link to ="/admin" style={{marginLeft: '15px', color: 'white'}}>관리자</Link>
     )}
   </div>
   <div>

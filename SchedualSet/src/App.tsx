@@ -1,6 +1,6 @@
 
 import React from 'react';
-import VacationForm from './page/VacationForm';
+import VacationForm from './component/VacationForm';
 import VacationCalendar from './page/VacationCalender';
 import RegisterPage from './page/RegisterPage';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
