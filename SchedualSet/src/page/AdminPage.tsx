@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import AdmUserManagement from '../component/AdmUserManagement'; // 파일명과 일치시켜야 함
-import AdmVacationManagement from '../component/AdmVacationManagement'; // 휴가 관리 탭은 이후 구현
+import AdmUserManagement from '../component/Admin/AdmUserManagement'; // 파일명과 일치시켜야 함
+import AdmVacationManagement from '../component/Admin/AdmVacationManagement'; // 휴가 관리 탭은 이후 구현
 
 export default function AdminPage() {
     const [tab, setTab] = useState<'user' | 'vacation'>('user');

@@ -11,9 +11,10 @@ interface Vacation {
 
 interface Props {
     userId: string;
+    refresh: boolean;
 }
 
-export default function VacationList({userId}: Props) {
+export default function VacationList({userId,refresh}: Props) {
     const [vacations, setVacations] = useState<Vacation[]>([]);
     
 
@@ -28,7 +29,7 @@ export default function VacationList({userId}: Props) {
         };
 
         fetchVacations();
-    }, []);
+    }, [userId, refresh]);
 
     const handleDelete = async (vacationId: number) => {
         try {

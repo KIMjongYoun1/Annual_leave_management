@@ -22,11 +22,26 @@ export default function LeaveBalance() {
             .catch(err => console.error('휴가정보 불러오기 실패', err)); 
     }, [userid]);
     return (
-        <div>
-            <h3>Vacations</h3>
-            <p>Earned_Vacation: {leave.earned}</p>
-            <p>use_Vacation: {leave.used}</p>
-            <p><strong>Have_Vacation: {leave.remaining}</strong></p>
+        <div style={boxStyle}>
+            <h3 style={{ marginBottom: '8px', fontSize: '12px'}}>연차 정보</h3>
+            <p><strong>발생 연차:</strong> {leave.earned}일</p>
+            <p><strong>사용 연차:</strong> {leave.used}일</p>
+            <p><strong>잔여 연차:</strong> <strong>{leave.remaining}일</strong></p>
         </div>
     );
+    
 }
+
+const boxStyle: React.CSSProperties = {
+    flex: 1,
+    height: '230px',
+    minWidth: '200px',
+    border: '1px solid #ccc',
+    padding: '10px',
+    borderRadius: '10px',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+};

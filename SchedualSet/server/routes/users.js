@@ -1,6 +1,7 @@
 const express = require('express');
 const pool = require('../db');
 const router = express.Router();
+const upload = require('../middlewares/upload.js');
 // const cors = require('cors');
 // const app = express();
 // const port = 3001;
@@ -12,11 +13,11 @@ const router = express.Router();
 
 
 router.post('/register', async (req, res) => {
-    const { userid, username, password, department, position } = req.body;
+    const { userid, username, password, department, position, email, phone } = req.body;
     try {
         const [result] = await pool.execute(
-            'INSERT INTO users (user_id, user_name, password, department, position) VALUES (?, ?, ?,?,?)',
-            [userid, username, password, department, position]
+            'INSERT INTO users (user_id, user_name, password, department, position, email, phone) VALUES (?, ?, ?,?,?,?,?)',
+            [userid, username, password, department, position, email, phone]
         );
         res.status(201).json({ message: '회원가입 성공' });
     } catch (err) {
@@ -60,7 +61,7 @@ router.post('/login', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const [rows] = await pool.execute(
-            'SELECT user_id, user_name, department, position FROM users WHERE user_id = ?'
+            'SELECT user_id, user_name, department, position, profile_image, email, phone FROM users WHERE user_id = ?'
             , [req.params.id]
         );
         console.log('조회결과', rows);
@@ -73,6 +74,33 @@ router.get('/:id', async (req, res) => {
         console.error('유저조회 실패', err);
         res.status(500).json({ error: '서버에러' });
 
-    } });
+    }
+});
+
+router.put('/:id', upload.single('profile_image'), async(req, res) => {
+    const {department, position, email, phone} = req.body;
+    const { id } = req.params;
+    const image = req.file ? req.file.filename : null;
+
+    try {
+        let query = `UPDATE users SET department = ?, position = ?,email =?, phone =?, updated_at = NOW(0)`;
+        const params = [department, position, email, phone];
+
+        if (image) {
+            query += `, profile_image = ?`;
+            params.push(image);
+        }
+
+        query += ` WHERE user_id = ?`;
+        params.push(id);
+
+        await pool.execute(query, params);
+        res.json({message: '수정 완료'});
+
+    } catch (err) {
+        console.error('수정 실패',err);
+        res.status(500).json({error: '수정실패'});
+    }
+});
 
 module.exports = router;

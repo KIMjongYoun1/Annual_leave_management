@@ -69,9 +69,16 @@ router.delete('/:id', async (req, res) => {
         const [[vacation]] = await pool.execute(
             'SELECT user_id FROM vacations WHERE vacation_id = ?', [id]
         );
+      
         if (!vacation) {
             return res.status(404).json({ message: '휴가정보가 존재하지않습니다' });
         }
+
+        const user = req.user;
+        if (!user || (vacation.user_id !== user.user_id && user.role !== 'Admin')) {
+            return res.status(403).json({ message: '권한이 없습니다.' });
+        }
+
         const [result] = await pool.execute(
             'DELETE FROM vacations WHERE vacation_id = ?', [id]
         );

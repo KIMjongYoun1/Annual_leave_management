@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import ExcelDownload from './ExcelDownload'; // 실제 경로에 맞게 수정
+import ExcelDownload from '../Utill/ExcelDownload.tsx'; // 실제 경로에 맞게 수정
 
 interface Vacation {
     vacation_id: number;
@@ -71,7 +71,7 @@ export default function AdmVacationManagement() {
                 <select onChange={handleMonthChange} style={{ marginRight: '10px' }}>
                     <option value="">전체</option>
                     <option value="2025-06">2025년 6월</option>
-                    ...
+                    
 
                 </select>
 
@@ -102,11 +102,7 @@ export default function AdmVacationManagement() {
                 <button type='submit'>검색</button>
             </form>
 
-            {/* ✅ 엑셀 다운로드 버튼 추가 */}
-            <div style={{ marginBottom: '20px' }}>
-                <ExcelDownload data={vacations} fileName={`휴가목록_${page}페이지`} />
-            </div>
-
+       
             {/* 테이블 */}
             <table>
                 <thead>
@@ -130,6 +126,11 @@ export default function AdmVacationManagement() {
                     ))}
                 </tbody>
             </table>
+                 {/* ✅ 엑셀 다운로드 버튼 추가 */}
+                 <div style={{ marginBottom: '20px' }}>
+                <ExcelDownload data={vacations} fileName={`휴가목록_${page}페이지`} />
+            </div>
+
             {/* 페이지버튼 */}
             <div style={{ marginTop: '20px' }}>
                 <button onClick={() => setPage((p) => Math.max(1, p - 1))} >이전</button>

@@ -5,17 +5,21 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from 'axios';
 import { Navigate, useNavigate } from 'react-router-dom';
 
-export default function VacationForm(){
-    const navigate = useNavigate();
+interface Props {
+    userId: string;
+    userName: string;
+    onSuccess: () => void;
+  }
+
+export default function VacationForm({ userId, userName, onSuccess }: Props){
+    
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [reason, setReason] = useState('');
-    const raw = localStorage.getItem('user');
-    const user = raw ? JSON.parse(raw) : null;
     const [leaveType, setLeaveType] = useState('Annual');
 
-    if (!user) {
-        return <Navigate to ="/users/login" />
+    if (!userId || !userName) {
+        return <Navigate to="/users/login" />
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -27,13 +31,12 @@ export default function VacationForm(){
 
         //여기서 Axios 등으로 API호출
         const payload = {
-            user_id : user.user_id, // 로그인구현전까지
-                name: user.user_name,
-                leave_type: reason || leaveType,
-                start_date: formatDate(startDate),
-                end_date: formatDate(endDate),
-                title: reason?.trim() || leaveType 
-                
+            user_id : userId,
+            name: userName,
+            leave_type: reason || leaveType,
+            start_date: formatDate(startDate),
+            end_date: formatDate(endDate),
+            title: reason?.trim() || leaveType 
         };
         
         try {
@@ -41,7 +44,7 @@ export default function VacationForm(){
            await axios.post('http://localhost:3001/api/vacations', payload); 
             console.log('📦 전달된 값:', payload);
             alert('휴가 등록 완료!');
-            navigate('/user/info');
+            onSuccess();
 
         } catch (err: any) {
             console.log("🧨 오류 응답:", err.response);
@@ -58,7 +61,7 @@ export default function VacationForm(){
     return (
         <form onSubmit={handleSubmit}>
             <div>
-            <h3>{user!.user_name} 님의 휴가 등록</h3>
+            <h3>{userName} 님의 휴가 등록</h3>
             </div>
             <div>
                 <select value={leaveType} onChange={(e) => setLeaveType(e.target.value)}>

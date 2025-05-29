@@ -7,6 +7,9 @@ export default function RegisterPage() {
     const [password, setPassword] = useState('');
     const [department, setDepartMent] = useState('');
     const [position, setPosition] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+
 
 
     const handleRegister = async (e: React.FormEvent) => {
@@ -17,7 +20,9 @@ export default function RegisterPage() {
                 username,
                 password,
                 department,
-                position
+                position,
+                email,
+                phone
             });
             alert('가입완료');
         } catch (err) {
@@ -25,26 +30,31 @@ export default function RegisterPage() {
         }
     };
 
-return (
-    <form onSubmit={handleRegister}>
-        <h2>Register</h2>
-        <input type='text' placeholder='ID'
-        value={userid}
-        onChange={(e) => setUserId(e.target.value)}/>
-        <br></br><br></br>
-        <input type='text' placeholder='Name'
-        value={username}
-        onChange={(e) => setUserName(e.target.value)} />
-        <br></br><br></br>
-        <input type='password' placeholder='Password'
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}/>
-        <br></br><br></br>
-        <input type ="text" placeholder='부서' value={department} onChange={(e) => setDepartMent(e.target.value)} />
-        <br></br><br></br>
-        <input type = "text" placeholder='직급' value={position} onChange={(e) => setPosition(e.target.value)}/>
-        <br></br>
-        <button type='submit'>Register Right Now!</button>
-    </form>
+    return (
+        <form onSubmit={handleRegister}>
+            <h2>Register</h2>
+            <input type='text' placeholder='ID'
+                value={userid}
+                onChange={(e) => setUserId(e.target.value)} />
+            <br></br><br></br>
+            <input type='text' placeholder='Name'
+                value={username}
+                onChange={(e) => setUserName(e.target.value)} />
+            <br></br><br></br>
+            <input type='password' placeholder='Password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)} />
+            <br></br><br></br>
+            <input type="text" placeholder="이메일" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <br /><br />
+            <input type="text" placeholder="연락처" value={phone} onChange={(e) => setPhone(e.target.value)} />
+            <br /><br />
+
+            <input type="text" placeholder='부서' value={department} onChange={(e) => setDepartMent(e.target.value)} />
+            <br></br><br></br>
+            <input type="text" placeholder='직급' value={position} onChange={(e) => setPosition(e.target.value)} />
+            <br></br>
+            <button type='submit'>Register Right Now!</button>
+        </form>
     );
 }
