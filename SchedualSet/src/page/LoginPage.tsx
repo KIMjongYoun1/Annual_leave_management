@@ -43,6 +43,7 @@ return (
         <br></br>
         <input type="password" placeholder='PASSWORD'
         value={password} onChange={(e) => setPassword(e.target.value)} />
+        <br></br>
         <button type="submit">Login</button>
     </form>
 )

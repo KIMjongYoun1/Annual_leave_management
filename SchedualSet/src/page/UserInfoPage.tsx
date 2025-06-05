@@ -5,6 +5,9 @@ import LeaveBalance from '../component/Vacations/LeaveBalance';
 import VacationForm from '../component/Vacations/VacationForm';
 import VacationList from '../component/Vacations/VacationList';
 import UserProfileEdit from '../component/Users/UserProfileEdit';
+import AwardComponent from '../component/Details/AwardComponent';
+import CareerComponent from '../component/Details/CareerComponent';
+import ProjectComponent from '../component/Details/ProjectComponent';
 import axios from 'axios';
 
 export default function UserInfoPage() {
@@ -13,12 +16,14 @@ export default function UserInfoPage() {
     const [userInfo, setUserInfo] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [refresh, setReFresh] = useState(false);
+    const [currentUser, setCurrentUser] = useState<any>(null);
 
     useEffect(() => {
         const raw = localStorage.getItem('user');
         const user = raw ? JSON.parse(raw) : null;
 
         if (user?.user_id) {
+            setCurrentUser(user);
             axios.get(`http://localhost:3001/api/users/${user.user_id}`)
                 .then((res) => setUserInfo(res.data))
                 .catch((err) => console.error('유저 조회 실패', err))
@@ -58,20 +63,36 @@ export default function UserInfoPage() {
                         <UserProfileEdit user={userInfo} onCancel={() => setEditMode(false)} />
                     )}
 
-                    {/* (향후) 수상/경력 추가 예정 */}
-                </>
-            )}
+                    {/* 여기에 컴포넌트들만 섹션으로 추가 */}
+                    <section style={{ marginTop: '30px' }}>
+                        <CareerComponent viewedUserId={userInfo.user_id} currentUser={currentUser} />
+                    </section>
 
-            {activeTab === 'vacation' && (
-                <>
+                    <section style={{ marginTop: '30px' }}>
+                        <ProjectComponent viewedUserId={userInfo.user_id} currentUser={currentUser} />
+                    </section>
 
-                    <VacationForm userId={userInfo.user_id} userName={userInfo.user_name}
-                        onSuccess={() => setReFresh(prev => !prev)} />
-                    <VacationList userId={userInfo.user_id} refresh={refresh} />
+                    <section style={{ marginTop: '30px' }}>
+                        <AwardComponent viewedUserId={userInfo.user_id} currentUser={currentUser} />
+                    </section>
+                
                 </>
-               
+    )
+}
+
+{
+    activeTab === 'vacation' && (
+        <>
+
+            <VacationForm userId={userInfo.user_id} userName={userInfo.user_name}
+                onSuccess={() => setReFresh(prev => !prev)} />
+            <VacationList userId={userInfo.user_id} refresh={refresh} />
+        </>
+
     )
 }
         </div >
+         
     );
+    
 }

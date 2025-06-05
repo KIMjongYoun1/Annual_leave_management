@@ -38,6 +38,7 @@ export default function AwardComponent({viewedUserId, currentUser}: AwardCompone
     const [newAward, setNewAward] = useState({ title: '', description: '', award_date: '' });
     const [editAwardId, setEditAwardId] = useState<number | null>(null);
     const [editData, setEditData] = useState({ title: '', description: '', award_date: '' });
+    const [showAddForm, setShowAddForm] = useState(false);
 
     useEffect(() => {
         fetchAwards();
@@ -62,6 +63,7 @@ export default function AwardComponent({viewedUserId, currentUser}: AwardCompone
                 ...newAward, user_id: viewedUserId
             });
             setNewAward({ title: '', description: '', award_date: '' });
+            setShowAddForm(false);
             fetchAwards();
         } catch (err) {
             console.error('추가실패', err);
@@ -140,26 +142,29 @@ export default function AwardComponent({viewedUserId, currentUser}: AwardCompone
             </table>
 
             { /* 입력폼 */}
-            {(currentUser.user_id === viewedUserId || currentUser.role === 'Admin') && (
+            <button onClick={()=> setShowAddForm(true)}>추가</button>
+            {showAddForm &&(
+            (currentUser.user_id === viewedUserId || currentUser.role === 'Admin') && (
                 <div style={{ marginTop: '10px' }}>
                     <input
                         placeholder='제목'
                         value={newAward.title}
                         onChange={(e) => setNewAward({ ...newAward, title: e.target.value })} />
-                    <br><br></br></br>
+                    <br />
                     <input
                         placeholder='설명'
                         value={newAward.description}
                         onChange={(e) => setNewAward({ ...newAward, description: e.target.value })} />
-                    <br><br></br></br>
+                    <br />
                     <input
                         type="date"
                         value={newAward.award_date}
                         onChange={(e) => setNewAward({ ...newAward, award_date: e.target.value })} />
-                    <br></br><br></br>
+                    <br />
                     <button onClick={handleAdd}>추가</button>
+                    <button onClick={() => setShowAddForm(false)}>취소</button>
                 </div>
-            )}
+            ))}
         </div>
     );
 }
