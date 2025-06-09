@@ -4,4 +4,5 @@ export interface Notice {
     content: string;
     created_at: string;
     author_id: string;
+    category: string;
 }

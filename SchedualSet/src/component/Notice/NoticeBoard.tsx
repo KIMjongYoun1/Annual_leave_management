@@ -29,6 +29,8 @@ const boxStyle: React.CSSProperties = {
 export default function NoticeBoard({currentUser} : NoticeBoardProps) {
     const [ notices, setNotices ] = useState<Notice[]>([]);
     const [ loading, setLoading ] = useState(true);
+    const [ searchText, setSearchText] = useState('');
+    const [ filteredNotices, setFilteredNotices] = useState<Notice[]>([]);
 
     useEffect(()=>{
         fetchNotices();
@@ -46,9 +48,24 @@ export default function NoticeBoard({currentUser} : NoticeBoardProps) {
         }
     };
 
+    const handleSearch = async () => {
+        try {
+            const res = await axios.get(`/api/notices/search?title=${searchText}`);
+            setFilteredNotices(res.data);
+        } catch (err) {
+            console.error('검색 실패', err);
+        }
+    }
+
     return (
         <div style={boxStyle}>
             <h2>공지 사항</h2>
+            <input type='text'
+            placeholder='제목 검색'
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            style={{ marginBottom: '10px', width: '100%', padding: '5px'}} />
+            <button onClick={handleSearch}>검색</button>
            {currentUser.role === 'Admin' &&(
             <div style={{marginBottom: '10px', textAlign: 'right'}}>
                 <Link to="/notices/new">
