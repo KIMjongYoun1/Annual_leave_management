@@ -3,7 +3,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Modal from '../component/Utill/Modal';
-
+import { type EventClickArg } from '@fullcalendar/core';
 
 
 interface VacationEvent {
@@ -69,7 +69,7 @@ export default function VacationClendar() {
       console.error('휴가불러오기 실패', err);
     }
   };
-  const handleEventClick = (info: any) => {
+  const handleEventClick = (info: EventClickArg) => {
 
     console.log("🟡 handleEventClick 호출됨:", info);
 
@@ -152,7 +152,7 @@ export default function VacationClendar() {
         plugins={[dayGridPlugin]}
         initialView="dayGridMonth"
         events={events}
-        eventClick={(arg: EventClickAtg) => handleEventClick(arg)
+        eventClick={(arg: EventClickArg) => handleEventClick(arg)
         }
         height="auto"
         eventTimeFormat={{

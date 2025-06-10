@@ -102,7 +102,7 @@ export default function NoticeBoard({currentUser} : NoticeBoardProps) {
                         ))}
                     </tbody>
                 </table>
-            );}
+            )};
         </div>
     )
 }

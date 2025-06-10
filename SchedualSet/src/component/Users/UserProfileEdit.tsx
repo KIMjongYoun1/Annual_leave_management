@@ -11,7 +11,12 @@ interface User {
     profile_image?: string;
 }
 
-export default function UserProfileEdit({ user, onCancel}: { user: User }) {
+interface UserProfileEditProps {
+    user: User;
+    onCancel: () => void;
+}
+
+export default function UserProfileEdit({ user, onCancel}:UserProfileEditProps ) {
     const [department, setDepartMent] = useState(user.department || '');
     const [position, setPosition] = useState(user.position || '');
     const [imageFile, setImageFile] = useState<File | null>(null);
@@ -40,7 +45,8 @@ export default function UserProfileEdit({ user, onCancel}: { user: User }) {
             alert('수정완료');
 
             const updateUser = await axios.get(`http://localhost:3001/api/users/${user.user_id}`);
-            window.location.reload();
+            localStorage.setItem('user', JSON.stringify(updateUser.data));
+            // window.location.reload();
 
         } catch (err) {
             console.error('수정실패', err);

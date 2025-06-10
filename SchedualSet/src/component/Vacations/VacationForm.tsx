@@ -3,7 +3,7 @@ import { useState } from 'react'; //중복선언
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import axios from 'axios';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 interface Props {
     userId: string;

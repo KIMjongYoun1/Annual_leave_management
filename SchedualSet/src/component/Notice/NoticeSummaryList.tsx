@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Notice } from '../../interfaces/notice';
+import { type Notice } from '../../interfaces/notice';
 
 
 

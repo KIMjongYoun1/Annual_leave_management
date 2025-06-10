@@ -28,7 +28,7 @@ export default function LoginPage() {
             });
             localStorage.setItem('user',JSON.stringify(res.data.user));
             alert(res.data.message);
-            navigate('/calendar');
+            navigate('/');
         } catch (err :any) {
             alert(err.reasponse ?.data.message);
         }

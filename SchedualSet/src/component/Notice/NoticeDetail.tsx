@@ -48,7 +48,7 @@ export default function NoticeDetail({ currentUser }: NoticeDetailProps) {
             navigate('/notices');
         } catch (err) {
             alert('삭제 실패');
-            console.log(${ notice_id })
+            console.log( `선택 공지 : ${notice_id}`)
         }
     };
 
