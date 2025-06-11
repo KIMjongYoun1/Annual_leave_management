@@ -11,17 +11,27 @@ export default function NoticeSummaryList() {
     const NOTICE_API = '/api/notices';
 
     useEffect(() => {
-    axios.get(NOTICE_API).then((res) => {
-        const filtered = res.data
-            .filter((n: Notice) => n.category === '긴급')
-            .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-            .slice(0, 3);
-        setNotices(filtered);
-    })
-    .catch((err) => {
-        console.error('공지조회 실패', err);
-    });
-}, []);
+        axios.get('http://localhost:3001/api/notices')
+          .then((res) => {
+            const data = Array.isArray(res.data) ? res.data : [];
+      
+            const filtered = data
+            //   .filter((n: Notice) => n.category === '' && n.created_at)
+              .sort((a, b) => {
+                const timeA = new Date(a.created_at).getTime();
+                const timeB = new Date(b.created_at).getTime();
+                return timeB - timeA;
+              })
+              .slice(0, 3);
+      
+            setNotices(filtered);
+            console.log('불러온공지',res.data);
+          })
+          .catch((err) => {
+            console.error('📛 공지조회 실패:', err);
+          });
+      }, []);
+      
 
    return (
     <div>

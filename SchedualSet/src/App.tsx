@@ -50,7 +50,7 @@ function App() {
         <Route path="/notices/:notice_id" element={<NoticeDetail currentUser={currentUser} />} />
         <Route path="/notices/new" element={<NoticeForm currentUser={currentUser} />} />
         <Route path="/notices/edit/:notice_id" element={<NoticeForm currentUser={currentUser} />} />
-
+    
         {/* <Route path="/user/awards" element={<AwardComponent />} />
         <Route path="/user/careers" element={<CareerComponent />} />
         <Route path="/user/projects" element={<ProjectComponent />} /> */}

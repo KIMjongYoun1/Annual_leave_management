@@ -3,9 +3,9 @@ const router = express.Router();
 const pool = require('../db');
 
 //[1] 전체 공지 조회
-router.get('/api/notices', async (req,res) => {
+router.get('/', async (req,res) => {
     try {
-        const [rows] = await pool.query('SELECT * FROM notices ORDER BY created_at DESC');
+        const [rows] = await pool.query('SELECT * FROM notices ORDER BY created_at DESC LIMIT 5');
         res.json(rows);
     } catch (err) {
         console.error('공지조회 실패', err);
