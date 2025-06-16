@@ -8,7 +8,7 @@ import { type Notice } from '../../interfaces/notice';
 export default function NoticeSummaryList() {
 
     const [notices, setNotices] = useState<Notice[]>([]);
-    const NOTICE_API = '/api/notices';
+    // const NOTICE_API = '/api/notices';
 
     useEffect(() => {
         axios.get('http://localhost:3001/api/notices')

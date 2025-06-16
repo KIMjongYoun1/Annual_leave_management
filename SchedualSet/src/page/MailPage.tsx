@@ -8,6 +8,9 @@ type TabType = 'inbox' | 'sent' | 'compose';
 export default function MailPage() {
     const [tab, setTab] = useState<TabType>('inbox');
     const [selectedMailId, setSelectedMailId] = useState<number | null>(null);
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userId = user?.user_id;
+
 
     return (
         <div style={{ padding: '20px' }}>
@@ -16,12 +19,12 @@ export default function MailPage() {
                 <button onClick={() =>  { setTab('sent'); setSelectedMailId(null); } } style={{ marginLeft: '10px' }}>보낸 메일함</button>
                 <button onClick={() =>  { setTab('compose'); setSelectedMailId(null); } } style={{ marginLeft: '10px' }}>메일 쓰기</button>
             </div>
-            {tab === 'compose' && <MailCompose />}
+            {tab === 'compose' && <MailCompose userId={userId} />}
             {(tab === 'inbox' || tab === 'sent') && !selectedMailId && (
-                <MailList type={tab} onSelectMail={(id) => setSelectedMailId(id)} />
+                <MailList type={tab} userId={userId} onSelectMail={(id) => setSelectedMailId(id)} />
             )}
             {(tab === 'inbox' || tab === 'sent') && selectedMailId && (
-                <MailDetail mailId={selectedMailId} onBack={() => setSelectedMailId(null)} />
+                <MailDetail mailId={selectedMailId} userId={userId} onBack={() => setSelectedMailId(null)} />
             )}
         </div>
     );
