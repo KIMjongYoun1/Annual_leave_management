@@ -13,8 +13,8 @@ interface NoticeBoardProps {
 
 const boxStyle: React.CSSProperties = {
     flex: 1,
-    height: '230px',
-    minWidth: '200px',
+    height: '1000px',
+    minWidth: '1000px',
     border: '1px solid #ccc',
     padding: '5px',
     borderRadius: '10px',
@@ -64,10 +64,10 @@ export default function NoticeBoard({currentUser} : NoticeBoardProps) {
             placeholder='제목 검색'
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            style={{ marginBottom: '10px', width: '100%', padding: '5px'}} />
+            style={{ marginBottom: '10px', width: '50%', padding: '5px'}} />
             <button onClick={handleSearch}>검색</button>
-           {currentUser.role === 'Admin' &&(
-            <div style={{marginBottom: '10px', textAlign: 'right'}}>
+           {currentUser.role === 'Admin' && (
+            <div style={{marginBottom: '5px', textAlign: 'right'}}>
                 <Link to="/notices/new">
                 <button>+ 새 글 작성</button>
                 </Link>
@@ -81,8 +81,9 @@ export default function NoticeBoard({currentUser} : NoticeBoardProps) {
             ) : (
                 <table style={{ width: '100%', borderCollapse: 'collapse'}}>
                     <thead>
-                        <tr style={{background: '#f0f0f0#' }}>
+                        <tr style={{background: '#f0f0f0' }}>
                             <th style={{padding: '10px'}}>번호</th>
+                            <th style={{padding: '10px'}}>카테고리</th>
                             <th style={{padding: '10px'}}>제목</th>
                             <th style={{padding: '10px'}}>작성자</th>
                             <th style={{padding: '10px'}}>날짜</th>
@@ -92,6 +93,7 @@ export default function NoticeBoard({currentUser} : NoticeBoardProps) {
                         {notices.map((notice, index) => (
                             <tr key={notice.notice_id} style={{borderBottom: '1px solid #ddd'}}>
                                 <td style={{padding: '10px', textAlign: 'center'}}>{index + 1 }</td>
+                                <td style={{padding: '10px', textAlign: 'center'}}>{notice.category}</td>
                                 <td style={{padding: '10px'}}>
                                     <Link to={`/notices/${notice.notice_id}`} style={{textDecoration: 'none', color: 'black'}}>
                                     {notice.title}</Link>
@@ -102,7 +104,7 @@ export default function NoticeBoard({currentUser} : NoticeBoardProps) {
                         ))}
                     </tbody>
                 </table>
-            )};
+            )}
         </div>
     )
 }

@@ -39,7 +39,7 @@ export default function NoticeSummaryList() {
         <ul>
             {notices.map((n)=> (
                 <li key={n.notice_id}>
-                    <Link to={`/notices/${n.notice_id}`}>{n.title}</Link>
+                    <Link to={`/notices/${n.notice_id}`}>[{n.category}] {n.title} </Link>
                     <span style={{ marginLeft: '10px', fontSize: '12px', color: '#666'}}>
                         {new Date(n.created_at).toLocaleDateString()}
                     </span>

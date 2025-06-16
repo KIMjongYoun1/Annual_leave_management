@@ -19,9 +19,9 @@ const leaveTypeMap: { [key: string]: string } = {
 
 export default function AdmVacationManagement() {
     const [vacations, setVacations] = useState<Vacation[]>([]);
-    const [userid, setUserId] = useState('');
-    const [start_date, setStartDate] = useState('');
-    const [end_date, setEndDate] = useState('');
+    // const [userid, setUserId] = useState('');
+    // const [start_date, setStartDate] = useState('');
+    // const [end_date, setEndDate] = useState('');
     const [page, setPage] = useState(1);
 
     const [filters, setFilters] = useState({

@@ -4,7 +4,7 @@ const path = require('path');
 const multer = require('multer');
 
 const storage = multer.diskStorage({
-    destination: (requ, file, cb) => {
+    destination: (req, file, cb) => {
         cb(null, 'uploads/');
     },
     filename: (req, file, cb) => {
@@ -14,15 +14,22 @@ const storage = multer.diskStorage({
     }
 });
 
+const blockedExtensions = [
+    '.exe', '.msi', 'bat', '.sh', '.apk', '.dmg',
+    '.jar', '.dll', '.sys', '.iso', '.php', '.jsp', '.asp'
+];
+
 const upload = multer({
     storage,
     limits: { fileSize: 2 * 1024 * 1024},
     fileFilter: (req, file, cb) => {
-        const allowed = ['image/jpeg', 'image/png'];
-        if (allowed.includes(file.mimetype)) {
-            cb(null,true);
+        const ext = path.extname(file.originalname).toLowerCase();
+
+        if (blockedExtensions.includes(ext)) {
+            cb (new Error('이 형식의 파일은 업로드 할 수 없습니다.'), false);
+
         } else {
-            cb(new Error('지원하지 않는 형식입니다'), false);
+            cb (null,true);
         }
     }
 });
