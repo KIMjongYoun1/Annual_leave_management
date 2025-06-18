@@ -10,20 +10,7 @@ interface NoticeDetailProps{
         role: string;
     };
 }
-const boxStyle: React.CSSProperties = {
-    flex: 1,
-    height: '230px',
-    minWidth: '200px',
-    border: '1px solid #ccc',
-    padding: '5px',
-    borderRadius: '10px',
-    boxSizing: 'border-box',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    overflowY: 'auto'
-};
+
 
 
 export default function NoticeDetail({ currentUser }: NoticeDetailProps) {

@@ -34,8 +34,7 @@ export default function MailDetail ({mailId, userId, onBack}: MailDetailProps) {
             <p><strong>보낸 사림</strong>{mail.from_id}</p>
             <p><strong>받는 사람</strong>{mail.to_id}</p>
             <p><strong>보낸 시간</strong>{mail.sent_at}</p>
-            <div style={{marginTop: '20px', whiteSpace: 'pre-line'}}>{mail.content}</div>
-            
+            <div style={{marginTop: '20px'}} dangerouslySetInnerHTML={{ __html: mail.content}} />           
             {mail.attachment && mail.attachment.length > 0 && (
                 <div style={{marginTop: '20px'}}>
                     <strong>첨부 파일</strong>
