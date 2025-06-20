@@ -35,7 +35,7 @@ export default function MailCompose({ userId }: MailComposeProps) {
                 formData.append('attachments[]', file));
         }
         try {
-            await axios.post('/api/mails/send', formData, {
+            await axios.post('/api/mails', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             alert('메일 발송 완료');

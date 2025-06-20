@@ -15,8 +15,9 @@ import NoticeBoard from './component/Notice/NoticeBoard';
 import NoticeDetail from './component/Notice/NoticeDetail';
 import NoticeForm from './component/Notice/NoticeForm';
 import MainPage from './page/MainPage';
-
-
+import MailPage from './page/MailPage';
+import MailCompose from './component/Mail/MailCompose';
+import MailDetailWrapper from './component/Mail/MailDetailWrapper';
 
 
 
@@ -50,7 +51,10 @@ function App() {
         <Route path="/notices/:notice_id" element={<NoticeDetail currentUser={currentUser} />} />
         <Route path="/notices/new" element={<NoticeForm currentUser={currentUser} />} />
         <Route path="/notices/edit/:notice_id" element={<NoticeForm currentUser={currentUser} />} />
-    
+        <Route path="/mails" element={<ProtectedRoute> <MailPage /> </ProtectedRoute>} />
+        <Route path="/mails/compose" element={<ProtectedRoute><MailCompose userId={currentUser?.user_id} /></ProtectedRoute>} />
+        <Route path="/mails/:mailId" element={<ProtectedRoute><MailDetailWrapper /></ProtectedRoute>} />
+
         {/* <Route path="/user/awards" element={<AwardComponent />} />
         <Route path="/user/careers" element={<CareerComponent />} />
         <Route path="/user/projects" element={<ProjectComponent />} /> */}
