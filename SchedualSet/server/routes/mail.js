@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db');
+const pool = require('../db');
 const upload = require('../middlewares/upload');
 
 // 받은 메일
@@ -8,7 +8,7 @@ router.get('/inbox/:userId', async (req, res) => {
     const { userId } = req.params;
     try {
         const [rows] = await pool.execute(
-            'SELECT * FROM mails WHERE to_id = ? ORDER BY DESC', [userId]
+            'SELECT * FROM mails WHERE to_id = ? ORDER BY sent_at DESC', [userId]
         );
         res.json(rows);
     } catch (err) {
@@ -23,7 +23,7 @@ router.get('/sent/:userId', async (req, res) => {
 
     try {
         const [rows] = await pool.execute(
-            'SELECT * FROM mails WHERE from_id = ? ORDER BY DESC', [userId]
+            'SELECT * FROM mails WHERE from_id = ? ORDER BY sent_at DESC', [userId]
         );
         res.json(rows);
     } catch (err) {
@@ -94,10 +94,12 @@ router.get('/:mailId', async (req,res) => {
           }));
           
 
-        res.json(mails);
+        res.json(mail);
 
     } catch (err) {
         console.error('메일 상세조회 실패', err);
         res.status(500).json({error: '메일서버 오류'});
     }
 });
+
+module.exports = router;

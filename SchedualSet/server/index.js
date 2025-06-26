@@ -16,6 +16,8 @@ const leaveBalanceRoutes = require('./routes/leaveBalance');
 const adminRoutes = require('./routes/admin');
 const awardRoutes = require('./routes/details');
 const noticesRoutes = require('./routes/notices');
+const mailRoutes = require('./routes/mail'); // 경로 정확히 확인
+
 
 app.use(cors());
 app.use(express.json()); // JSON 바디 파싱
@@ -27,6 +29,8 @@ app.use('/api/leave', leaveBalanceRoutes); // 잔여 연차 계산 및 관리
 app.use('/api/admin', adminRoutes); // 관리자 페이지 관련 기능
 app.use('/api/notices', noticesRoutes); // 공지사항 관련 기능
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api/mails', mailRoutes); // ✅ 이거 빠져있었음!
+
 app.use(awardRoutes);
 // 서버 시작
 app.listen(PORT, () => {

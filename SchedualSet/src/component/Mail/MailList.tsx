@@ -23,17 +23,28 @@ export default function MailList({ type, userId, onSelectMail }: MailListProps) 
 
     useEffect(() => {
         const fetchMails = async () => {
-            try {
-                const res = await axios.get(`api/mails/${type}?userId=${userId}`);
-                setMails(res.data);
-            } catch (err) {
-                console.error('메일목록 조회 실패', err);
-            } finally {
-                setLoading(false);
+          try {
+            const res = await axios.get(`/api/mails/${type}/${userId}`);
+            console.log('응답 확인:', res.data);
+      
+            if (!Array.isArray(res.data)) {
+              console.error('서버에서 배열이 아닌 데이터를 반환했습니다:', res.data);
+              setMails([]); // 빈 배열로 초기화해 UI가 깨지지 않게 처리
+              return;
             }
+      
+            setMails(res.data);
+          } catch (err) {
+            console.error('메일 목록 조회 실패', err);
+            setMails([]); // 실패했을 때도 안전하게
+          } finally {
+            setLoading(false);
+          }
         };
+      
         fetchMails();
-    }, [type,userId]);
+      }, [type, userId]);
+      
 
     if (loading) return <p>불러오는중...</p>
     if (mails.length === 0) return <p>메일이 없습니다.</p>
